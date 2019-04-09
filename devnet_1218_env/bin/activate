@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/sfloresk/devnet_1218/devnet_1218_env"
+VIRTUAL_ENV="$HOME/devnet_1218/devnet_1218_env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
