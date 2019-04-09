@@ -1,0 +1,65 @@
+{
+  "policyName": "{{policy_name}}",
+  "policyDescription": "",
+  "policyType": "feature",
+  "policyDefinition": {
+    "assembly": [
+      {% for data_policy in data_policies %}
+        {
+          "definitionId": "{{data_policy['definitionId']}}",
+          "type": "data",
+          "entries": [
+            {
+              "direction": "service",
+              "siteLists": [
+                {% for siteList in data_policy['siteLists'] %}
+                  "{{ siteList }}"
+                   {% if data_policy['siteLists']|length < loop.index %}
+                  ,
+                  {% endif %}
+                {% endfor %}
+              ],
+              "vpnLists": [
+                {% for vpnList in data_policy['vpnLists'] %}
+                  "{{ vpnList }}"
+                  {% if data_policy['vpnLists']|length < loop.index %}
+                    ,
+                  {% endif %}
+                {% endfor %}
+              ]
+            }
+          ]
+        },
+      {% endfor %}
+      {% for control_policy in control_policies %}
+      {
+        "definitionId": "{{control_policy['definitionId']}}",
+        "type": "control",
+        "entries": [
+          {
+            "direction": "out",
+            "siteLists": [
+              {% for siteList in control_policy['siteLists'] %}
+                  "{{ siteList }}"
+                {% if control_policy['siteLists']|length < loop.index %}
+                  ,
+                {% endif %}
+              {% endfor %}
+            ]
+          }
+        ]
+      },
+      {% endfor %}
+      {% for vpn_member_group_policy in vpn_member_group_policies %}
+      {
+        "definitionId": "{{vpn_member_group_policy['definitionId']}}",
+        "type": "vpnMembershipGroup"
+      }
+        {% if vpn_member_group_policies|length < loop.index %}
+                  ,
+        {% endif %}
+      {% endfor %}
+    ]
+  },
+  "isPolicyActivated": false
+}
