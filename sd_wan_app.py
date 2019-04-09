@@ -54,15 +54,11 @@ def GetSiteListPolicies():
     raise Exception("Not Implemented")
 
 
-def CreateFWCentrilizedPolicy():
-    raise Exception("Not Implemented")
-
-
 def GetCentralizedPolicies():
     raise Exception("Not Implemented")
 
 
-def ActivatePolicy(policyId):
+def CreateFWCentrilizedPolicy():
     raise Exception("Not Implemented")
 
 
