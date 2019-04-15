@@ -29,8 +29,14 @@
               ]
             }
           ]
-        },
+        }
+        {% if data_policies|length < loop.index %}
+          ,
+        {% endif %}
       {% endfor %}
+      {% if data_policies|length > 0 and control_policies|length > 0 %}
+        ,
+      {% endif %}
       {% for control_policy in control_policies %}
       {
         "definitionId": "{{control_policy['definitionId']}}",
@@ -48,8 +54,14 @@
             ]
           }
         ]
-      },
+      }
+        {% if control_policies|length < loop.index %}
+          ,
+        {% endif %}
       {% endfor %}
+      {% if control_policies|length > 0 and vpn_member_group_policies|length > 0 %}
+        ,
+      {% endif %}
       {% for vpn_member_group_policy in vpn_member_group_policies %}
       {
         "definitionId": "{{vpn_member_group_policy['definitionId']}}",
