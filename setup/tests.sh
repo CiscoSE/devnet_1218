@@ -7,6 +7,6 @@ curl -k -X GET \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Basic YWRtaW46YWRtaW4='
 
-
+source $HOME/devnet_1218/devnet_1218_env/bin/activate
 echo "Opening Pycharm"
 charm .
