@@ -1,0 +1,77 @@
+{
+	"info": {
+		"_postman_id": "182bf17c-b356-4188-a495-6fd3b9311201",
+		"name": "DEVNET-1218",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Activate Policy",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "https://198.18.1.10:443/dataservice/template/policy/vsmart/activate/YOUR_FW_POLICY_ID",
+					"protocol": "https",
+					"host": [
+						"198",
+						"18",
+						"1",
+						"10"
+					],
+					"port": "443",
+					"path": [
+						"dataservice",
+						"template",
+						"policy",
+						"vsmart",
+						"activate",
+						"YOUR_FW_POLICY_ID"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	}
+}

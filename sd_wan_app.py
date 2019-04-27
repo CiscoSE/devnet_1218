@@ -39,37 +39,37 @@ def PrintMenu():
     print("8- Exit")
 
 
-# ********* Step 2 - Get Devices
+# ********* Option 1 - Get Devices
 
 
 
 
-# ********* Step 3 - Get Control Policies
+# ********* Option 2 - Get Control Policies
 
 
 
 
-# ********* Step 4 - Get VPN List Policies
+# ********* Option 3 - Get VPN List Policies
 
 
 
 
-# ********* Step 5 - Get Site List Policies
+# ********* Option 4 - Get Site List Policies
 
 
 
 
-# ********* Step 6 - Get Centralized Policies
+# ********* Option 5 - Get Centralized Policies
 
 
 
 
-# ********* Step 7 - Create FW Insertion Policy
+# ********* Option 6 - Create FW Insertion Policy
 
 
 
 
-# ********* Step 9 - - Get Interface Statistics
+# ********* Option 7 - - Get Interface Statistics
 
 
 
@@ -154,7 +154,7 @@ if __name__ == "__main__":
             elif option == "7":
                 result = GetInterfaceStatistics()
                 if_statistics = []
-                for if_statistic in result["data"]:
+                for if_statistic in result["data"][:10]:
                     if_statistics.append([
                         if_statistic["host_name"],
                         if_statistic["interface"],
@@ -163,7 +163,8 @@ if __name__ == "__main__":
                         if_statistic["tx_errors"],
                         if_statistic["rx_pkts"],
                         if_statistic["rx_errors"]])
-                print("\nInterface statistics:\n")
+
+                print("\nInterface statistics (First 10 results):\n")
                 print(tabulate(if_statistics,
                                headers=['Device', 'Interface', 'Status', 'TX Pkts', 'TX Errors', 'RX Pkts',
                                         'RX Errors']))
