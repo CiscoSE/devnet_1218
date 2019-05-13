@@ -149,7 +149,7 @@ if __name__ == "__main__":
                 print(tabulate(centralized_policies, headers=['Policy Name', 'Description', 'Is Active?', 'ID']))
                 print("\n")
             elif option == "6":
-                CreateFWCentrilizedPolicy()
+                CreateFWCentralizedPolicy()
 
             elif option == "7":
                 result = GetInterfaceStatistics()
