@@ -10,6 +10,7 @@ requests.packages.urllib3.disable_warnings()
 
 # Static variables
 
+# Base vManage URL
 VMANAGE_URL = "https://198.18.1.10/"
 
 # IMPORTANT: Credentials are hardcoded for training purpose only. DO NOT DO THIS IN PRODUCTION
@@ -94,6 +95,7 @@ if __name__ == "__main__":
             # Check option selection. If something needs to be printed, use tabulate for a more readable output
 
             if option == "1":
+                # Get and print devices
                 result = GetDevices()
                 devices = []
                 for device in result["data"]:
@@ -103,6 +105,7 @@ if __name__ == "__main__":
                 print("\n")
 
             elif option == "2":
+                # Get and print Control policies
                 result = GetControlPolicies()
                 policies = []
                 for policy in result["data"]:
@@ -112,6 +115,7 @@ if __name__ == "__main__":
                 print("\n")
 
             elif option == "3":
+                # Get and VPN List policies
                 result = GetVPNListPolicies()
                 vpn_list = []
                 for vpn in result["data"]:
@@ -125,6 +129,7 @@ if __name__ == "__main__":
                 print("\n")
 
             elif option == "4":
+                # Get and site list policies
                 result = GetSiteListPolicies()
                 site_list = []
                 for site in result["data"]:
@@ -136,7 +141,9 @@ if __name__ == "__main__":
                 print("\nSite List Policies:\n")
                 print(tabulate(site_list, headers=['Site List Name', 'Entries', 'Type', 'ID']))
                 print("\n")
+
             elif option == "5":
+                # Get and print Centralized Policies
                 result = GetCentralizedPolicies()
                 centralized_policies = []
                 for policy in result["data"]:
@@ -149,9 +156,11 @@ if __name__ == "__main__":
                 print(tabulate(centralized_policies, headers=['Policy Name', 'Description', 'Is Active?', 'ID']))
                 print("\n")
             elif option == "6":
+                # Create a pre-defined firewall centralized policy
                 CreateFWCentralizedPolicy()
 
             elif option == "7":
+                # Get and print interface statistics
                 result = GetInterfaceStatistics()
                 if_statistics = []
                 for if_statistic in result["data"][:10]:
@@ -169,12 +178,17 @@ if __name__ == "__main__":
                                headers=['Device', 'Interface', 'Status', 'TX Pkts', 'TX Errors', 'RX Pkts',
                                         'RX Errors']))
                 print("\n")
+
             elif option == "8":
-                exit(1)
+                # Exit the application
+                exit(0)
             else:
+                # Check for invalid inputs
                 print("Invalid Option")
         except Exception as e:
+            # Check for unexpected errors
             print("Error occurred: " + str(e))
 
+        # Wait for a return before printing the menu again
         print("Press return to come back to the main menu.")
         raw_input()
