@@ -41,41 +41,196 @@ def PrintMenu():
 
 
 # ********* Option 1 - Get Devices
+def GetDevices():
+    """
+    Returns all devices registered in vManage
+    :return: dictionary with devices data
+    """
+    # Define URL
+    url = VMANAGE_URL + "dataservice/device"
 
+    print("Getting devices from " + url)
 
+    # Make http GET request
+    response = requests.request("GET", url, headers=HTTP_HEADERS, verify=False)
+
+    # Check for errors
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("Error trying to fetch devices: " + response.text)
+
+    return response.json()
 
 
 # ********* Option 2 - Get Control Policies
+def GetControlPolicies():
+    """
+    Returns all control policies in vManage
+    :return: dictionary with control policies data
+    """
+    # Define URL
+    url = VMANAGE_URL + "dataservice/template/policy/definition/control/"
 
+    print("Getting control policies from " + url)
 
+    # Make http GET request
+    response = requests.request("GET", url, headers=HTTP_HEADERS, verify=False)
+
+    # Check for errors
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("Error trying to fetch control policies: " + response.text)
+
+    return response.json()
 
 
 # ********* Option 3 - Get VPN List Policies
 
+def GetVPNListPolicies():
+    """
+    Returns VPN list policies in vManage
+    :return: dictionary with VPN list policies data
+    """
+    # Define URL
+    url = VMANAGE_URL + "dataservice/template/policy/list/vpn/"
 
+    print("Getting VPN list policies from " + url)
+
+    # Make http GET request
+    response = requests.request("GET", url, headers=HTTP_HEADERS, verify=False)
+
+    # Check for errors
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("Error trying to fetch VPN list: " + response.text)
+
+    return response.json()
 
 
 # ********* Option 4 - Get Site List Policies
+def GetSiteListPolicies():
+    """
+    Returns site policies in vManage
+    :return: dictionary with site policies data
+    """
+    # Define URL
+    url = VMANAGE_URL + "dataservice/template/policy/list/site/"
 
+    print("Getting Site list policies from " + url)
 
+    # Make http GET request
+    response = requests.request("GET", url, headers=HTTP_HEADERS, verify=False)
+
+    # Check for errors
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("Error trying to fetch site list: " + response.text)
+
+    return response.json()
 
 
 # ********* Option 5 - Get Centralized Policies
 
+def GetCentralizedPolicies():
+    """
+    Returns all the centralized/vsmart policies
+    :return: dictionary with centralized/vsmart policy data
+    """
 
+    # Define URL
+    url = VMANAGE_URL + "dataservice/template/policy/vsmart/"
+
+    print("Getting centralized vsmart policies from " + url)
+
+    # Make http GET request
+    response = requests.request("GET", url, headers=HTTP_HEADERS, verify=False)
+
+    # Check for errors
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("Error trying to fetch site list: " + response.text)
+
+    return response.json()
 
 
 # ********* Option 6 - Create FW Insertion Policy
+def CreateFWCentralizedPolicy():
+    """
+    Creates a centralized policy that forwards all the traffic to a firewall in one of the datacenters
+    :return: None
+    """
+
+    # Define variables to store selected policies and lists
+    selected_control_policies = []
+    selected_data_policies = []
+    selected_vpn_mem_policies = []
+    selected_site_list = []
+
+    print("Looking for needed site list...")
+    # Look for AllBranches site list and append it to selected_site_list
+    site_lists = GetSiteListPolicies()
+    for site_list in site_lists["data"]:
+        if site_list["name"] == "AllBranches":
+            selected_site_list.append(site_list["listId"])
+            break
+
+
+    print("Looking for needed control policies...")
+    # Look for MultiTopologyFWInsertion control policy and append it to selected_control_policies
+    control_policies = GetControlPolicies()
+    for control_policy in control_policies["data"]:
+        if control_policy["name"] == "MultiTopologyFWInsertion":
+            control_policy["siteLists"] = selected_site_list
+            selected_control_policies.append(control_policy)
+            break
+
+    # Define URL
+    url = VMANAGE_URL + "dataservice/template/policy/vsmart/"
+
+    print("Creating vSmart new policy via " + url)
+    # Render the payload with the data gathered
+    template = JSON_TEMPLATES.get_template('create_vsmart_fw_policy.j2.json')
+    payload = template.render(policy_name="FWInsertionVPN10-API",
+                              data_policies=selected_data_policies,
+                              control_policies=selected_control_policies,
+                              vpn_member_group_policies=selected_vpn_mem_policies
+                              ).replace("\n", "")
+
+    # Make http POST request
+    response = requests.request("POST", url, headers=HTTP_HEADERS, data=payload, verify=False)
+
+    # Check for errors
+    if response.status_code < 200 or response.status_code > 299:
+        print("Error trying to create FW vSmart policy: " + response.text)
+    else:
+        print("Policy created!")
+
+    # Look for a centralized policy named FWInsertionVPN10-API. If found print the ID
+    centralized_policies = GetCentralizedPolicies()["data"]
+    for policy in centralized_policies:
+        if policy["policyName"] == "FWInsertionVPN10-API":
+            print ("ID:")
+            print (policy["policyId"])
+
 
 
 
 
 # ********* Option 7 - - Get Interface Statistics
 
+def GetInterfaceStatistics():
+    """
+    Returns all interface statistics
+    :return: dictionary with statistics
+    """
+    # Define URL
+    url = VMANAGE_URL + "dataservice/statistics/interface/"
 
+    print("Getting interface statistics from " + url)
 
+    # Make http GET request
+    response = requests.request("GET", url, headers=HTTP_HEADERS, verify=False)
 
+    # Check for errors
+    if response.status_code < 200 or response.status_code > 299:
+        raise Exception("Error trying to fetch site list: " + response.text)
 
+    return response.json()
 
 
 # ********* DO NOT MODIFY CODE BELOW *********
